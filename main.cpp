@@ -37,9 +37,91 @@ typedef struct s_Pixel {
  * @param sigma 
  */
 
-void gaussianBlur(const std::vector<Pixel>& inputImage, std::vector<Pixel>& outputImage, int width, int height, int kernelSize, double sigma)
+bool gaussianBlur(const std::vector<Pixel>& inputImage, std::vector<Pixel>& outputImage, int width, int height, int kernelSize, double sigma)
+{
+    int halfSize = kernelSize / 2;
+
+    std::vector<std::vector<double>> kernel(kernelSize, std::vector<double>(kernelSize, 0.0));
+    double sum = 0.0;
+
+    for (int i= -halfSize; i<= halfSize; ++i)
+    {
+        for(int j = -halfSize; j <= halfSize; ++j)
+        {
+            double value = std::exp(-(i*i + j*j) / (2*sigma*sigma)) / (2*M_PI*sigma*sigma);
+            kernel[i + halfSize][j + halfSize] = value;
+            sum += value;
+        }
+    }
+
+    for(int i = 0; i < kernelSize; ++i)
+    {
+        for(int j = 0; j < kernelSize; ++j)
+        {
+            kernel[i][j] /= sum;
+        }
+    }
+
+    std::vector<Pixel> tempImage(width * height);
+
+    for(int i = 0; i < height; ++i)
+    {
+        for(int j = 0; j < width; ++j) 
+        {
+            double red = 0.0, green = 0.0, blue = 0.0;
+            for(int k = -halfSize; k <= halfSize; ++k)
+            {
+                for(int l = -halfSize; l <= halfSize; ++l)
+                {
+                    int x = std::min(std::max(j + l, 0), width - 1);
+                    int y = std::min(std::max(i + k, 0), height - 1);
+                    red += inputImage[y * width + x].red * kernel[k + halfSize][l + halfSize];
+                    green += inputImage[y * width + x].green * kernel[k + halfSize][l + halfSize];
+                    blue += inputImage[y * width + x].blue * kernel[k + halfSize][l + halfSize];
+                }
+            }
+            tempImage[i * width + j].red = red;
+            tempImage[i * width + j].green = green;
+            tempImage[i * width + j].blue = blue;
+        }
+    }
+    outputImage = tempImage;
+    return(true);
+}
+
+/**
+ * @brief 
+ * 
+ * @param filename 
+ * @param image 
+ * @param width 
+ * @param height 
+ * @return true 
+ * @return false 
+ */
+
+bool readPNG(const std::string& filename, std::vector<Pixel>& image, int& width, int& height)
 {
     // TODO
+    return (true);
+}
+
+/**
+ * @brief 
+ * 
+ * @param filename 
+ * @param image 
+ * @param width 
+ * @param height 
+ * @return true 
+ * @return false 
+ */
+
+bool writePNG(const std::string& filename, const std::vector<Pixel>& image, int width, int height)
+{
+    // TODO
+
+    return (true);
 }
 
 /**

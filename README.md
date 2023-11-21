@@ -222,7 +222,12 @@ TARGET_LINK_LIBRARIES()
 
 ---
 
+# usage of a PNG reader ()
+git@github.com:lvandeve/lodepng.git
 
 ```
 
 ```
+
+# PNG docs
+http://www.libpng.org/pub/png/pngdocs.html

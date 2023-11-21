@@ -1,0 +1,6 @@
+[submodule "third-party/lodepng"]
+	path = third-party/lodepng
+	url = https://github.com/lvandeve/lodepng.git
+[submodule "third-party/libpng"]
+	path = third-party/libpng
+	url = git@github.com:glennrp/libpng.git

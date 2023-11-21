@@ -16,15 +16,8 @@
 #include <fstream>
 #include <algorithm>
 
-
-#define EXPECTED_ARGUMENTS (4)
-#define ARG_INPUT_FILE (1)
-#define ARG_KERNEL_SIZE (2)
-#define ARG_SIGMA (3)
-
-typedef struct s_Pixel {
-    unsigned char red, green, blue;
-} t_Pixel;
+#include "gaussian_blur.h"
+#include "third-party/lodepng/lodepng.h"
 
 /**
  * @brief 
@@ -37,11 +30,11 @@ typedef struct s_Pixel {
  * @param sigma 
  */
 
-bool gaussianBlur(const std::vector<Pixel>& inputImage, std::vector<Pixel>& outputImage, int width, int height, int kernelSize, double sigma)
+bool gaussianBlur(const std::vector<t_Pixel>& inputImage, std::vector<t_Pixel>& outputImage, int width, int height, int kernelSize, double sigma)
 {
     int halfSize = kernelSize / 2;
 
-    std::vector<std::vector<double>> kernel(kernelSize, std::vector<double>(kernelSize, 0.0));
+    std::vector<std::vector<double> > kernel(kernelSize, std::vector<double>(kernelSize, 0.0));
     double sum = 0.0;
 
     for (int i= -halfSize; i<= halfSize; ++i)
@@ -62,7 +55,7 @@ bool gaussianBlur(const std::vector<Pixel>& inputImage, std::vector<Pixel>& outp
         }
     }
 
-    std::vector<Pixel> tempImage(width * height);
+    std::vector<t_Pixel> tempImage(width * height);
 
     for(int i = 0; i < height; ++i)
     {
@@ -92,41 +85,6 @@ bool gaussianBlur(const std::vector<Pixel>& inputImage, std::vector<Pixel>& outp
 /**
  * @brief 
  * 
- * @param filename 
- * @param image 
- * @param width 
- * @param height 
- * @return true 
- * @return false 
- */
-
-bool readPNG(const std::string& filename, std::vector<Pixel>& image, int& width, int& height)
-{
-    // TODO
-    return (true);
-}
-
-/**
- * @brief 
- * 
- * @param filename 
- * @param image 
- * @param width 
- * @param height 
- * @return true 
- * @return false 
- */
-
-bool writePNG(const std::string& filename, const std::vector<Pixel>& image, int width, int height)
-{
-    // TODO
-
-    return (true);
-}
-
-/**
- * @brief 
- * 
  * @param argc 
  * @param argv 
  * @return int 
@@ -143,14 +101,15 @@ int main(int argc, char *argv[]){
     int kernelSize = std::atoi(argv[ARG_KERNEL_SIZE]);
     double sigma = std::atof(argv[ARG_SIGMA]);
 
-    if(kernelSize & 1 == 0){
+    if((kernelSize & 1) == 0){
         std::cerr << "Kernel size must be odd" << std::endl;
         return EXIT_FAILURE;
     }
     
-    std::vector<Pixel> inputImage, outputImage;
+    std::vector<t_Pixel> inputImage;
+	std::vector<t_Pixel> outputImage;
     int width, height;
-    if(!readPNG())
+    if(!lodepng::decode(inputImage, width, height, inputFilename))
     {
         std::cerr << "Error while reading PNG file" << std::endl;
         return EXIT_FAILURE;
@@ -161,7 +120,7 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
-    if(!writePNG(outputFilename, outputImage, width, height))
+    if(!lodepng::encode(outputFilename, outputImage, width, height))
     {
         std::cerr << "Error while writing PNG file" << std::endl;
         return EXIT_FAILURE;

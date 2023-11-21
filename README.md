@@ -68,6 +68,11 @@ cropping: you don't calculated the outer pixels , so the image output is smaller
 kernelcropping: you adjust the kernel , the 
 constant: you
 
+## Cmake notes
+- cmake -S -B .
+- update the Cmakelist.txt
+
+
 ## Definition of the Gaussian Blur
 ```pseudo-code
 for each image row in input image:
@@ -197,3 +202,27 @@ https://google.github.io/styleguide/cppguide.html
 - TODO comments
 - FORMATTING
 - Exceptions to the Rules
+
+---
+
+## Cmake notes
+
+```Cmake
+ADD_SUBDIRECTORY()
+ADD_EXECUTABLE()
+INCLUDE_DIRECTORIES()
+ADD_DEFINITIONS
+TARGET_LINK_LIBRARIES()
+```
+- problem
+- problem of modularity
+- public dependancy
+	- go upwards
+- Forbid /report circular and hidden dependencies
+
+---
+
+
+```
+
+```

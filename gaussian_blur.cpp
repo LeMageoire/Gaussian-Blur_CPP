@@ -17,7 +17,13 @@
 #include <algorithm>
 
 #include "gaussian_blur.h"
-#include "third-party/lodepng/lodepng.h"
+//#include "third-party/lodepng/lodepng.h"
+#include <png.h>
+
+extern "C" {
+#include <zlib.h>
+}
+
 
 /**
  * @brief 

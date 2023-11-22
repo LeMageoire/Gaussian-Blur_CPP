@@ -226,7 +226,7 @@ int main(int argc, char *argv[]){
     #endif
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
     ImageProcessing::write_png_file(outputFilename.c_str(), width, height, outputImage);
-    delete outputImage;
-    delete inputImage;
+    //delete outputImage;
+    //delete inputImage;
     return EXIT_SUCCESS;
 }

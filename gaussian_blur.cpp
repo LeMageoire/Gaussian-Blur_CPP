@@ -26,8 +26,8 @@ extern "C" {
 //#define COMPUTE_ON
 
 namespace ImageProcessing{
-/*
-    void write_png_file(const char* file_name, int width, int height, const std::vector<std::vector<t_Pixel>>* image_data) {
+
+    void write_png_file(const char* file_name, int width, int height, std::vector<std::vector<t_Pixel>>* image_data) {
         FILE* fp = fopen(file_name, "wb");
         if (!fp) return ;
         png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -38,7 +38,12 @@ namespace ImageProcessing{
         png_init_io(png, fp);
         std::vector<png_bytep> row_pointers;
         for (int y = 0; y < height; y++) {
-            row_pointers.push_back(reinterpret_cast<png_bytep>(&image_data[y][0]));
+            png_bytep row = new png_byte[width * sizeof(t_Pixel)];
+            row_pointers.push_back(row);
+            for (int x = 0; x < width; x++) {
+                t_Pixel pixel = (*image_data)[y][x];
+                memcpy(&row[x * sizeof(t_Pixel)], &pixel, sizeof(t_Pixel));
+            }
         }
         png_set_IHDR(
             png,
@@ -56,7 +61,7 @@ namespace ImageProcessing{
         fclose(fp);
         png_destroy_write_struct(&png, &info);
     }
-*/
+
     std::vector<std::vector<t_Pixel>>* readPNG(const char* filename, int* width, int* height) {
         auto image_data = new std::vector<std::vector<t_Pixel>>;
         FILE* fp = fopen(filename, "rb");
@@ -229,7 +234,7 @@ int main(int argc, char *argv[]){
     }
     #endif
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
-    //ImageProcessing::write_png_file(outputFilename.c_str(), width, height, outputImage);
+    ImageProcessing::write_png_file(outputFilename.c_str(), width, height, inputImage);
     /*{
         std::cerr << "Error while writing PNG file" << std::endl;
         return EXIT_FAILURE;

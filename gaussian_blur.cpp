@@ -23,7 +23,7 @@ extern "C" {
 #include <zlib.h>
 }
 
-//#define COMPUTE_ON
+#define COMPUTE_ON
 
 namespace ImageProcessing{
 
@@ -140,8 +140,7 @@ namespace ImageProcessing{
  * @param kernelSize 
  * @param sigma 
  */
-/*
-    bool gaussianBlur(const std::vector<t_Pixel>& inputImage, std::vector<t_Pixel>& outputImage, int width, int height, int kernelSize, double sigma)
+    bool gaussianBlur(std::vector<std::vector<t_Pixel>>* inputImage, std::vector<std::vector<t_Pixel>>**  outputImage, int width, int height, int kernelSize, double sigma)
     {
         int halfSize = kernelSize / 2;
 
@@ -164,32 +163,29 @@ namespace ImageProcessing{
                 kernel[i][j] /= sum;
             }
         }
-        std::vector<t_Pixel> tempImage(width * height);
-        for(int i = 0; i < height; ++i)
-        {
-            for(int j = 0; j < width; ++j) 
-            {
-                double red = 0.0, green = 0.0, blue = 0.0;
-                for(int k = -halfSize; k <= halfSize; ++k)
-                {
-                    for(int l = -halfSize; l <= halfSize; ++l)
-                    {
-                        int x = std::min(std::max(j + l, 0), width - 1);
-                        int y = std::min(std::max(i + k, 0), height - 1);
-                        red += inputImage[y * width + x].red * kernel[k + halfSize][l + halfSize];
-                        green += inputImage[y * width + x].green * kernel[k + halfSize][l + halfSize];
-                        blue += inputImage[y * width + x].blue * kernel[k + halfSize][l + halfSize];
-                    }
+        // Create the output image
+    *outputImage = new std::vector<std::vector<t_Pixel>>(height, std::vector<t_Pixel>(width));
+
+    // Apply the kernel to each pixel in the input image
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            double red = 0.0, green = 0.0, blue = 0.0;
+            for (int i = -halfSize; i <= halfSize; i++) {
+                for (int j = -halfSize; j <= halfSize; j++) {
+                    int xi = std::min(std::max(x + i, 0), width - 1);
+                    int yj = std::min(std::max(y + j, 0), height - 1);
+                    t_Pixel &pixel = (*inputImage)[yj][x];
+                    red += pixel.red * kernel[i + halfSize][j + halfSize];
+                    green += pixel.green * kernel[i + halfSize][j + halfSize];
+                    blue += pixel.blue * kernel[i + halfSize][j + halfSize];
                 }
-                tempImage[i * width + j].red = red;
-                tempImage[i * width + j].green = green;
-                tempImage[i * width + j].blue = blue;
             }
+            (*(*outputImage))[y][x] = {static_cast<unsigned char>(red), static_cast<unsigned char>(green), static_cast<unsigned char>(blue), 255};
         }
-        outputImage = tempImage;
+    }
+
         return(true);
     }
-*/
 }
 
 /**
@@ -220,25 +216,17 @@ int main(int argc, char *argv[]){
 	std::vector<std::vector<t_Pixel> > * outputImage;
     int width;
     int height;
-    //if(!lodepng::decode(inputImage, width, height, inputFilename))
     inputImage = ImageProcessing::readPNG(inputFilename.c_str(), &width, &height);
     if(inputImage == nullptr){
         std::cerr << "Error while reading PNG file" << std::endl;
         return EXIT_FAILURE;
     }
     #ifdef COMPUTE_ON
-    if(!ImageProcessing::gaussianBlur(inputImage, outputImage, width, height, kernelSize, sigma))
-    {
-        std::cerr << "Error while blurring image" << std::endl;
-        return EXIT_FAILURE;
-    }
+    ImageProcessing::gaussianBlur(inputImage, &outputImage, width, height, kernelSize, sigma);
     #endif
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
-    ImageProcessing::write_png_file(outputFilename.c_str(), width, height, inputImage);
-    /*{
-        std::cerr << "Error while writing PNG file" << std::endl;
-        return EXIT_FAILURE;
-    }*/
+    ImageProcessing::write_png_file(outputFilename.c_str(), width, height, outputImage);
+    delete outputImage;
     delete inputImage;
     return EXIT_SUCCESS;
 }

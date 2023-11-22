@@ -1,5 +1,10 @@
 # Gaussian-Blur_CPP
 My C++17 implementation of a Gaussian Blur for Image
+
+```bash
+g++ -o Gaussian_Blur_CLI gaussian_blur.cpp  -lpng -I/third-party/libpng/ -L/third-party/libpng/build clear
+```
+
 ## To-Do
 - [ ] find a .png I/O lib
 - [ ] feature 

@@ -5,5 +5,5 @@
 #define ARG_SIGMA (3)
 
 typedef struct s_Pixel {
-    unsigned char red, green, blue;
+    unsigned char red, green, blue, alpha;
 } t_Pixel;

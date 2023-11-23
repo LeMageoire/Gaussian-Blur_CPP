@@ -1,7 +1,16 @@
 
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <cstring>
+#include <fstream>
+#include <algorithm>
 
-#include "Kernel.hpp"
+#include "./Kernel/Kernel.hpp"
+#include "./Image/Image.hpp"
 #include "gaussian_blur.h"
+//#include "./File/File.hpp"
+#include "./File/PNGFile.hpp"
 
 int main(int argc, char *argv[]) {
     if (argc != EXPECTED_ARGUMENTS)
@@ -17,23 +26,12 @@ int main(int argc, char *argv[]) {
         std::cerr << "Kernel size must be odd" << std::endl;
         return EXIT_FAILURE;
     }
-    std::vector<std::vector<t_Pixel> > * inputImage;
-	std::vector<std::vector<t_Pixel> > * outputImage;
-    int width;
-    int height;
-
-    inputImage = ImageProcessing::readPNG(inputFilename.c_str(), &width, &height);
-    if(inputImage == nullptr){
-        std::cerr << "Error while reading PNG file" << std::endl;
-        return EXIT_FAILURE;
-    }
-    
-    GaussianKernel<double> kernel(kernelSize, sigma);
-    kernel.fill();
-    image.filter(kernel);
-
+    PNGFile Pf1(inputFilename);
+    Image im1(Pf1);
+    GaussianKernel<double> GaussianKernel(kernelSize, sigma);
+    im1.filter(GaussianKernel);
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
-    ImageProcessing::write_png_file(outputFilename.c_str(), width, height, outputImage);
-
+    PNGFile Pf2(outputFilename);
+    Pf2.write(im1);
     return EXIT_SUCCESS;
 }

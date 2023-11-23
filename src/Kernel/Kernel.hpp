@@ -2,8 +2,9 @@
 #define KERNEL_HPP
 
 #include <vector>
+//#include "../Concepts.hpp"
 
-template <Arithmetic T>
+template </*Arithmetic*/typename T>
 class Kernel {
 public:
     Kernel(int size);
@@ -15,6 +16,19 @@ protected:
     std::vector<std::vector<T>> data_;
 };
 
-#include "kernel.tpp"
+template </*Arithmetic*/ typename T>
+class GaussianKernel : public Kernel<T> {
+public:
+    GaussianKernel(int size, double sigma);
+
+    void fill() override;
+    
+    // ...
+
+private:
+    double sigma_;
+};
+
+#include "Kernel.tpp"
 
 #endif // KERNEL_HPP

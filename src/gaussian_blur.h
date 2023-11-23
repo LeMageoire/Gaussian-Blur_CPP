@@ -1,4 +1,5 @@
 
+
 #define EXPECTED_ARGUMENTS (4)
 #define ARG_INPUT_FILE (1)
 #define ARG_KERNEL_SIZE (2)

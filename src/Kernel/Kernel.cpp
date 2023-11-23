@@ -1,22 +1,5 @@
-#include <type_traits>
-#include <vector>
-
-template <typename T>
-concept Arithmetic = std::is_arithmetic_v<T>;
-
-template <Arithmetic T>
-class Kernel {
-public:
-    Kernel(int size) : size_(size), data_(size, std::vector<T>(size)) {}
-
-    virtual void fill() = 0;
-
-    const std::vector<std::vector<T>>& data() const { return data_; }
-
-protected:
-    int size_;
-    std::vector<std::vector<T>> data_;
-};
+include "Kernel.hpp"
+#include <cmath> // for std::exp
 
 template <Arithmetic T>
 class GaussianKernel : public Kernel<T> {
@@ -41,6 +24,8 @@ public:
         }
     }
 };
+
+template <Arithmetic T>
 class BoxKernel : public Kernel<T> {
 public:
     BoxKernel(int size) : Kernel<T>(size) {}
@@ -54,10 +39,3 @@ public:
         }
     }
 };
-
-int main() {
-    GaussianKernel<double> kernel(5);
-    kernel.fill();
-    BoxKernel<int> kernel2(5);
-    kernel2.fill();
-}

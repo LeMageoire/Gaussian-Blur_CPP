@@ -15,7 +15,7 @@
 int main(int argc, char *argv[]) {
     if (argc != EXPECTED_ARGUMENTS)
     {
-        std::cerr << "Usage: " << argv[0] << " <input_file> <output_file> <sigma>" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <input_file> <kernelsize> <sigma>" << std::endl;
         return EXIT_FAILURE;
     }
     std::string inputFilename = argv[ARG_INPUT_FILE];
@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
     }
     PNGFile Pf1(inputFilename);
     Image im1(Pf1);
-    GaussianKernel<double> GaussianKernel(kernelSize, sigma);
-    im1.filter(GaussianKernel);
+    //GaussianKernel<double> GaussianKernel(kernelSize, sigma);
+    //im1.filter(GaussianKernel);
     std::string outputFilename = inputFilename.substr(0, inputFilename.find_last_of('.')) + "_blurred.png";
     PNGFile Pf2(outputFilename);
     Pf2.write(im1);

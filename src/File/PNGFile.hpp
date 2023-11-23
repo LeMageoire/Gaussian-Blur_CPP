@@ -9,7 +9,7 @@ class PNGFile : public File {
 public:
     PNGFile(const std::string& filename) : File(filename) {}
 
-    std::vector<std::vector<t_Pixel>> read() const override; 
+    std::vector<std::vector<t_Pixel>> read(Image& image) const override; 
     void write(const Image& image) override;
 };
 

@@ -11,7 +11,7 @@ class File {
 public:
     File(const std::string& filename) : filename_(filename) {}
  
-    virtual std::vector<std::vector<t_Pixel> > read() const = 0;
+    virtual std::vector<std::vector<t_Pixel>> read(Image& image) const = 0;
 
     virtual void write(const Image& image) = 0;
 

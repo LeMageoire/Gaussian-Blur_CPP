@@ -149,3 +149,23 @@ void write_png_file(const char* file_name, int width, int height, std::vector<st
         fclose(fp);
         png_destroy_write_struct(&png, &info);
     }
+
+
+
+template </*Arithmetic*/typename T>
+class File {
+public:
+    File(int width, int height) : width_(width), height_(height), pixels_(height, std::vector<T>(width)) {}
+
+    template </*Arithmetic*/typename U>
+    void filter(Kernel<U>& kernel) {
+        // Implement the filter method here
+        // This method should apply the kernel to the pixels_
+    }
+
+    const std::vector<std::vector<T>>& pixels() const { return pixels_; }
+
+private:
+    int width_, height_;
+    std::vector<std::vector<T> > pixels_;
+};

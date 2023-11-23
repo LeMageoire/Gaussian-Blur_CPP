@@ -3,7 +3,7 @@ name: Run CppLint
 on:
   push:
     branches:
-      - develop  # Change this to your main branch
+      - main  # Change this to your main branch
 jobs:
   lint:
     runs-on: ubuntu-latest

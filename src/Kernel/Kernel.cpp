@@ -1,18 +1,25 @@
-include "Kernel.hpp"
-#include <cmath> // for std::exp
 
-template <Arithmetic T>
+#include <cmath> // for std::exp
+#include "../Kernel/Kernel.hpp"
+
+
+template </*Arithmetic*/typename T>
 class GaussianKernel : public Kernel<T> {
 public:
-    GaussianKernel(int size) : Kernel<T>(size) {}
+    GaussianKernel(int size, double sigma) 
+        : Kernel<T>(size),
+          sigma_(sigma)
+    {
+        this->fill();
+    }
 
-    void fill() override {
+    void fill() {
         int halfSize = this->size_ / 2;
         double sum = 0.0;
 
         for (int i = -halfSize; i <= halfSize; ++i) {
             for (int j = -halfSize; j <= halfSize; ++j) {
-                double value = std::exp(-(i * i + j * j) / (2 * sigma_ * sigma_)) / (2 * M_PI * sigma_ * sigma_);
+                double value = (1.0 / (2.0 * M_PI * sigma_ * sigma_)) * std::exp(-(i * i + j * j) / (2 * sigma_ * sigma_));
                 this->data_[i + halfSize][j + halfSize] = value;
                 sum += value;
             }
@@ -23,9 +30,14 @@ public:
             }
         }
     }
+    void print() const override {
+        Kernel <T>::print();
+    }
+    private :
+        double sigma_;
 };
 
-template <Arithmetic T>
+template </*Arithmetic*/ typename T>
 class BoxKernel : public Kernel<T> {
 public:
     BoxKernel(int size) : Kernel<T>(size) {}

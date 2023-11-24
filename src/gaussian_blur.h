@@ -1,4 +1,5 @@
-
+#ifndef GAUSSIAN_BLUR_H
+#define GAUSSIAN_BLUR_H
 
 #define EXPECTED_ARGUMENTS (4)
 #define ARG_INPUT_FILE (1)
@@ -8,3 +9,6 @@
 typedef struct s_Pixel {
     unsigned char red, green, blue, alpha;
 } t_Pixel;
+
+#endif //GAUSSIAN_BLUR_H
+

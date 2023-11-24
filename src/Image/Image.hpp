@@ -15,8 +15,27 @@ public:
     }
 
     void filter(const GaussianKernel<double>& kernel) {
-        // Apply the Gaussian filter to the image
+    int halfSize = kernel.getSize() / 2;
+    auto outputImage = std::vector<std::vector<t_Pixel>>(height_, std::vector<t_Pixel>(width_));
+    const auto& kernelData = kernel.data();
+    for (int y = 0; y < height_; y++) {
+        for (int x = 0; x < width_; x++) {
+            double red = 0.0, green = 0.0, blue = 0.0;
+            for (int i = -halfSize; i <= halfSize; i++) {
+                for (int j = -halfSize; j <= halfSize; j++) {
+                    int xi = std::min(std::max(x + i, 0), width_ - 1);
+                    int yj = std::min(std::max(y + j, 0), height_ - 1);
+                    t_Pixel &pixel = pixels_[yj][xi];
+                    red += pixel.red * kernelData[i + halfSize][j + halfSize];
+                    green += pixel.green * kernelData[i + halfSize][j + halfSize];
+                    blue += pixel.blue * kernelData[i + halfSize][j + halfSize];
+                }
+            }
+            outputImage[y][x] = {static_cast<unsigned char>(red), static_cast<unsigned char>(green), static_cast<unsigned char>(blue), 255};
+        }
     }
+    pixels_ = outputImage;
+}
 
     int getHeight() const {
         return height_;

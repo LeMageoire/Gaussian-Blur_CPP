@@ -2,6 +2,7 @@
 #define KERNEL_HPP
 
 #include <vector>
+#include <iostream>
 //#include "../Concepts.hpp"
 
 template </*Arithmetic*/typename T>
@@ -11,24 +12,34 @@ public:
     virtual void fill() = 0;
     const std::vector<std::vector<T>>& data() const;
 
+    int getSize() const {
+        return size_;
+    }
+    virtual void print() const {
+        for (const auto& row : data_) {
+            for (const auto& value : row) {
+                std::cout << value << ' ';
+            }
+            std::cout << '\n';
+        }
+    }
 protected:
     int size_;
     std::vector<std::vector<T>> data_;
 };
 
-template </*Arithmetic*/ typename T>
-class GaussianKernel : public Kernel<T> {
-public:
-    GaussianKernel(int size, double sigma);
+template <typename T>
+Kernel<T>::Kernel(int size) : size_(size), data_(size, std::vector<T>(size)) {}
 
-    void fill() override;
-    
-    // ...
+template <typename T>
+const std::vector<std::vector<T>>& Kernel<T>::data() const { return data_; }
 
-private:
-    double sigma_;
-};
+template <typename T>
+class GaussianKernel;
 
-#include "Kernel.tpp"
+template <typename T>
+class BoxKernel;
+
+#include "Kernel.cpp"
 
 #endif // KERNEL_HPP

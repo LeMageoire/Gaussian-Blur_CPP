@@ -1,9 +1,41 @@
+#ifndef KERNEL_HPP
+#define KERNEL_HPP
 
+#include <vector>
+#include <iostream>
 #include <cmath> // for std::exp
-#include "../Kernel/Kernel.hpp"
 
+template <typename T>
+class Kernel {
+public:
+    Kernel(int size);
+    virtual void fill() = 0;
+    const std::vector<std::vector<T>>& data() const;
+  
+    int getSize() const {
+        return size_;
+    }
+  
+    virtual void print() const {
+        for (const auto& row : data_) {
+            for (const auto& value : row) {
+                std::cout << value << ' ';
+            }
+            std::cout << '\n';
+        }
+    }
+protected:
+    int size_;
+    std::vector<std::vector<T>> data_;
+};
 
-template </*Arithmetic*/typename T>
+template <typename T>
+Kernel<T>::Kernel(int size) : size_(size), data_(size, std::vector<T>(size)) {}
+
+template <typename T>
+const std::vector<std::vector<T>>& Kernel<T>::data() const { return data_; }
+
+template <typename T>
 class GaussianKernel : public Kernel<T> {
 public:
     GaussianKernel(int size, double sigma) 
@@ -37,7 +69,7 @@ public:
         double sigma_;
 };
 
-template </*Arithmetic*/ typename T>
+template <typename T>
 class BoxKernel : public Kernel<T> {
 public:
     BoxKernel(int size) : Kernel<T>(size) {}
@@ -51,3 +83,5 @@ public:
         }
     }
 };
+
+#endif // KERNEL_HPP

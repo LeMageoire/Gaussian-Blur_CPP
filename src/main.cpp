@@ -5,11 +5,10 @@
 #include <fstream>
 #include <algorithm>
 
-#include "./Kernel/Kernel.hpp"
-#include "./Image/Image.hpp"
+#include "Kernel.hpp"
+#include "Image.hpp"
 #include "gaussian_blur.h"
-//#include "./File/File.hpp"
-#include "./File/PNGFile.hpp"
+#include "PNGFile.hpp"
 
 int main(int argc, char *argv[]) {
     if (argc != EXPECTED_ARGUMENTS)

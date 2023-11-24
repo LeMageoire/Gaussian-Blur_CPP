@@ -1,6 +1,6 @@
-#include "../File/PNGFile.hpp"
-#include "../Image/Image.hpp"
-#include "../gaussian_blur.h"
+#include "PNGFile.hpp"
+#include "Image.hpp"
+#include "gaussian_blur.h"
 #include "png.h"
 #include <cstring>
 #include <iostream>

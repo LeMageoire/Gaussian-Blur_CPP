@@ -3,7 +3,7 @@
 
 #include "File.hpp"
 #include <string>
-#include "../Image/Image.hpp"
+#include "Image.hpp"
 
 class PNGFile : public File {
 public:

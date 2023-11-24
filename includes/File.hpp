@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "../gaussian_blur.h"
+#include "gaussian_blur.h"
 
 class Image;
 

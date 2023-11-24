@@ -2,10 +2,10 @@
 #define IMAGE_HPP
 
 #include <vector>
-#include "../File/File.hpp"
-#include "../Kernel/Kernel.hpp"
-#include "../gaussian_blur.h"
-#include "../File/PNGFile.hpp"
+#include "File.hpp"
+#include "Kernel.hpp"
+#include "gaussian_blur.h"
+#include "PNGFile.hpp"
 
 
 class Image {

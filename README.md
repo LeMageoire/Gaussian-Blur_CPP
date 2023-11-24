@@ -10,9 +10,10 @@ My C++17 implementation of a Gaussian Blur for Image
 - a second PNG file is created and the write method is called
 - The Idea was to 
 
----
+--
+
 ## Special cases
-- Kernel size should be an odd number (I've read that often even number use the top-left corner)
+- Kernel size should be an odd number
 - Specific handling should be taken into account for "edges" of the images (because the convolution would be "out" of boundaries of the image)
     - the implementation use the "mirroiring"
 
@@ -86,7 +87,6 @@ https://google.github.io/styleguide/cppguide.html
 - Be mindful of our scale
 - Concede to optimization when necessary
 - Consider portability to other environments before using features from C++17 and C++20
-
 
 ## To-Do
 - [ ] improvements about the automation of the build

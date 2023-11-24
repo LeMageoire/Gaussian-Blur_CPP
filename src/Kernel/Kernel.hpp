@@ -11,10 +11,11 @@ public:
     Kernel(int size);
     virtual void fill() = 0;
     const std::vector<std::vector<T>>& data() const;
-
+  
     int getSize() const {
         return size_;
     }
+  
     virtual void print() const {
         for (const auto& row : data_) {
             for (const auto& value : row) {

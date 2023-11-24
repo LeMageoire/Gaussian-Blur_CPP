@@ -30,11 +30,9 @@ public:
             }
         }
     }
-
     void print() const override {
         Kernel <T>::print();
     }
-
     private :
         double sigma_;
 };
